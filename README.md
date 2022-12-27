@@ -9,12 +9,12 @@
 </div>
 
 ## :trophy: Componentes
-- Luiz Phillip Pereira Barbosa
 - Isabelle Queiroz Gomes de Assis
+- Luiz Phillip Pereira Barbosa
 - Paulo Vitor Alves de Oliveira
-- Vinícius Marçal de Araújo
 - Rodrigo Medeiros Florencio Leal
 - Thiago Botelho Rodrigues
+- Vinícius Marçal de Araújo
 
 ## :pencil: Tarefas Iniciais
 - Que big idea você propõe para o projeto?
