@@ -60,7 +60,13 @@
   - Monitoramento e avaliação: estabelecer indicadores de desempenho para medir e avaliar o impacto da solução na eficiência da gestão dos espaços esportivos e no acesso da população aos espaços.
 
 - Que solução você sugere para ser desenvolvida?
-
+  - O desenvolvimento de uma plataforma digital que integre as informações e processos de reservas dos espaços esportivos, além de oferecer recursos de comunicação e monitoramento. Seria importante garantir a integração com os sistemas existentes e possíveis novas implementações da SEGEL - UFPE e a escolha da tecnologia adequada para suportar a solução.
 
 - Como você testará a solução no mundo real?
+  - Para testar a solução no mundo real, seria necessário definir um ambiente piloto onde a plataforma digital possa ser testada em condições reais de uso. Será escolhido um conjunto de espaços esportivos da SEGEL - UFPE para a implantação inicial da plataforma, em um período determinado de tempo. Isso permitiria avaliar a eficácia da plataforma em lidar com os desafios específicos da gestão desses espaços esportivos, bem como identificar possíveis ajustes e melhorias que precisam ser feitos antes da implementação em larga escala. Além disso, é importante envolver usuários-chave, como gestores e coordenadores da SEGEL - UFPE e usuários dos espaços esportivos, para coletar feedback e sugestões de melhoria. Alguns dos tipos de teste que podemos usar são:
 
+    - Testes de usabilidade: avaliar a facilidade de uso e eficácia da solução pelos usuários reais;
+    - Testes de desempenho: avaliar a capacidade da solução em lidar com um grande número de usuários ou com um grande volume de dados; 
+    - Testes de segurança: avaliar a segurança da solução, incluindo proteção contra ameaças externas e internas;
+    - Testes de integração: avaliar a integração da solução com outros sistemas ou plataformas existentes;
+    - Testes de aceitação: avaliar se a solução atende aos requisitos do projeto e às expectativas dos usuários.
