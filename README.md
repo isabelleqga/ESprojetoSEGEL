@@ -31,7 +31,7 @@
   
   - Como conversar com os possíveis usuários do sistema para entender suas necessidades e as principais barreiras enfrentadas a fim de garantir que o sistema cumpra o seu papel de facilitador na comunicação com a gestão? 
 
-    - Como a adoção de uma plataforma pode ajudar a superar essas barreiras e melhorar o acesso aos espaços esportivos?
+  - Como a adoção de uma plataforma pode ajudar a superar essas barreiras e melhorar o acesso aos espaços esportivos?
 
   - Como garantir que a plataforma digital seja acessível e inclusiva para todos os usuários internos da UFPE e também para os usuários externos?
 
