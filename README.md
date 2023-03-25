@@ -29,3 +29,14 @@
 - Que questões norteadoras você propõe para explorar e aprender mais sobre o desafio?
   - Conversar com os gestores e coordenadores da SEGEL - UFPE para entender seus desejos e necessidades e garantir que o sistema funcione corretamente e os ajude de maneira eficiente. Conversar com possíveis usuários do sistema para entender seus desejos e necessidades para garantir que o sistema cumpra o seu papel de facilitador na comunicação com a gestão. 
 
+- Quais atividades e recursos norteadores você sugere para responder às questões norteadoras?
+
+
+- Quais os fundamentos que você aprendeu que nortearão as hipóteses de solução?
+
+
+- Que solução você sugere para ser desenvolvida?
+
+
+- Como você testará a solução no mundo real?
+
