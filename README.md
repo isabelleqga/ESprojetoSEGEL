@@ -4,7 +4,7 @@
     [IF977] - ENGENHARIA DE SOFTWARE - CIN UFPE
   </h2>
   <h1>
-    Projeto — Gestão de Equipamentos Esportivos da SEGEL
+    Projeto — Gestão de Espaços Esportivos da SEGEL
   </h1> 
 </div>
 
