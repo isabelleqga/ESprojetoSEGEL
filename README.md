@@ -46,7 +46,7 @@ O SACCE tem como objetivo prover uma plataforma que facilite a gestão e a visib
 
 ## Instalação de Ambiente
 
-O ambiente de desenvolvimento é implantado por meio de inúmeros frameworks, bibliotecas e plataformas, como o Docker. Para facilitar o uso, criamos uma documentação de instalação para evitar possíveis problemas. Para realizar estas instalações, basta seguir o guia de [Como usar](https://github.com/fga-gpp-mds/Falko-2017.2-BackEnd/wiki/Como-Usar-o-Docker).
+O ambiente de desenvolvimento é implantado por meio de inúmeros frameworks, bibliotecas e plataformas, como o Docker. Para facilitar o uso, criamos uma documentação de instalação para evitar possíveis problemas. Para realizar estas instalações, basta seguir o guia de [Como Instalar dependências (https://github.com/isabelleqga/ESprojetoSEGEL/wiki/Installation).
 
 ## Documentação
 
