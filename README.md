@@ -9,12 +9,12 @@
 </div>
 
 ## :trophy: Componentes
-- Isabelle Queiroz Gomes de Assis
-- Luiz Phillip Pereira Barbosa
-- Paulo Vitor Alves de Oliveira
-- Rodrigo Medeiros Florencio Leal
-- Thiago Botelho Rodrigues
-- Vinícius Marçal de Araújo
+- Isabelle Queiroz Gomes de Assis;
+- Luiz Phillip Pereira Barbosa;
+- Paulo Vitor Alves de Oliveira;
+- Rodrigo Medeiros Florencio Leal;
+- Thiago Botelho Rodrigues;
+- Vinícius Marçal de Araújo.
 
 
 ## :pencil: Projeto
