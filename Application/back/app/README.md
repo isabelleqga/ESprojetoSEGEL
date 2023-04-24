@@ -15,7 +15,7 @@ Change the BASE_URL variable on the .env file with your credentials.
 
 After that running
 
-Copy the .env file and JSON google sheet file on the directory root
+Copy the .env file on the directory root
 
 $ python -m uvicorn main:app --reload
 
@@ -23,9 +23,5 @@ $ python -m uvicorn main:app --reload
 You can check all back-end endpoints at the following link:
 http://localhost:8000/docs
 
-
-# Google Sheet Link:
-
-All files and links necessary to connect with google Sheets will send by email. 
 
 ```

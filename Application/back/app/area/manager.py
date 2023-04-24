@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 import uuid
 from database import model, schemas
-# from sheets.manager import execute
 
 
 def get_area_by_name(db: Session, name: str):
@@ -11,8 +10,11 @@ def get_area_by_name(db: Session, name: str):
 def get_all(db: Session):
     return db.query(model.Area).all()
 
+area_counter = 1
 
 def create_area(db: Session, area: schemas.Area):
+
+    global area_counter
 
     user = db.query(model.Account).filter(
         model.Account.id == area.account_id).first()
@@ -24,7 +26,7 @@ def create_area(db: Session, area: schemas.Area):
         area.account_id = user.id
 
     db_area = model.Area(
-        id=uuid.uuid4().hex,
+        id=str(area_counter),
         name=area.name,
         description=area.description,
         available=area.available,
@@ -35,7 +37,7 @@ def create_area(db: Session, area: schemas.Area):
     db.commit()
     db.refresh(db_area)
 
-    # execute()
+    area_counter += 1
 
     return db_area
 
@@ -45,10 +47,10 @@ def get_area_by_id(db: Session, id: str):
 
 def get_user_by_id(db: Session, id: str):
     find_user = db.query(model.Account).filter(model.Account.id == id).first()
-    if find_user.user_type == "0":
-        return True
     if not find_user:
         return False
+    elif find_user and find_user.user_type == "0":
+        return True   
     return False
 
 def update_area(db: Session, area: schemas.AreaUpdate, db_area: model.Area):
@@ -56,13 +58,12 @@ def update_area(db: Session, area: schemas.AreaUpdate, db_area: model.Area):
         db_area.name = area.name
     if area.description:
         db_area.description = area.description
-    if area.available:
-        db_area.available = area.available
+
+    db_area.available = area.available
     
     db.commit()
     db.refresh(db_area)
     return db_area
-
 
 
 # Exclui tudo
@@ -73,8 +74,6 @@ def delete_area(db: Session, db_area: model.Area):
 
 
 def delete_area_update(db: Session, db_area: model.Area):
-    '''if not db_area:
-        return None'''
     db_area.available = False
     db.commit()
     db.refresh(db_area)
@@ -83,4 +82,3 @@ def delete_area_update(db: Session, db_area: model.Area):
 
 def get_area_reservations(area_id: str, db: Session):
     return db.query(model.Reservation).filter(model.Reservation.area_id == area_id).count()
-

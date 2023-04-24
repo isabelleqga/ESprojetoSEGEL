@@ -8,7 +8,7 @@ from database.database import Base
 class Account(Base):
     __tablename__ = "accounts"
 
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     cpf = Column(String, unique=True, index=False)
     name = Column(String, unique=False, index=False)
     email = Column(String, unique=True, index=True)
@@ -24,11 +24,11 @@ class Account(Base):
 class Area(Base):
     __tablename__ = "areas"
 
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     name = Column(String, unique=True, index=False)
     available = Column(Boolean)
     description = Column(String)
-    account_id = Column(UUID, ForeignKey("accounts.id"), nullable=True)
+    account_id = Column(String, ForeignKey("accounts.id"), nullable=True)
 
     account = relationship("Account", back_populates="areas")
     reservations = relationship("Reservation", back_populates="areas")
@@ -37,16 +37,16 @@ class Area(Base):
 class Reservation(Base):
     __tablename__ = "reservations"
 
-    id = Column(UUID, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     value = Column(Integer)
-    reservation_date = Column(DateTime)
+    reservation_date = Column(String)
     time_start = Column(String)
     time_end = Column(String)
     justification = Column(String)
-    user_type = Column(String)
+    reservation_type = Column(String)
     status = Column(String)
-    area_id = Column(UUID, ForeignKey("areas.id"))
-    account_id = Column(UUID, ForeignKey("accounts.id"))
+    area_id = Column(String, ForeignKey("areas.id"))
+    account_id = Column(String, ForeignKey("accounts.id"))
 
     account = relationship("Account", back_populates="reservations")
     areas = relationship("Area", back_populates="reservations")

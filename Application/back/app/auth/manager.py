@@ -82,9 +82,13 @@ def get_account_by_email(db: Session, email: str):
     return db.query(model.Account).filter(model.Account.email == email).first()
 
 
+account_counter = 1
+
 def create_account(db: Session, account: schemas.Account):
+    global account_counter
+
     db_account = model.Account(
-        id=uuid.uuid4().hex,
+        id=str(account_counter),
         email=account.email,
         hashed_password=get_password_hash(account.hashed_password),
         cpf=account.cpf,
@@ -98,6 +102,8 @@ def create_account(db: Session, account: schemas.Account):
     db.commit()
     db.refresh(db_account)
 
+    account_counter += 1
+
     return db_account
 
 
@@ -105,10 +111,21 @@ def create_account(db: Session, account: schemas.Account):
 def get_account_by_id(db: Session, account_id: str):
     return db.query(model.Account).filter(model.Account.id == account_id).first()
 
+def get_user_by_id(db: Session, id: str):
+    find_user = db.query(model.Account).filter(model.Account.id == id).first()
+    if not find_user:
+        return False
+    elif find_user and find_user.user_type == "0":
+        return True   
+    return False
+
+
+def get_account_reservations(account_id: str, db: Session):
+    return db.query(model.Reservation).filter(model.Reservation.account_id == account_id).count()
+
+
 # Update Account
 def update_account(db: Session, account: schemas.AccountUpdate, db_account: model.Account):
-    '''if not db_account:
-        return None'''
     if account.name:
         db_account.name = account.name
     if account.email:
@@ -121,16 +138,18 @@ def update_account(db: Session, account: schemas.AccountUpdate, db_account: mode
     db.refresh(db_account)
     return db_account
 
+
 # Delete Account
 def delete_account(db: Session, db_account: model.Account):
     db.delete(db_account)
     db.commit()
+    return db_account
 
 
-def delete_account_update(db: Session, account: schemas.AccountDelete, db_account: model.Account):
-    '''if not db_account:
-        return None'''
+def delete_account_update(db: Session, db_account: model.Account):
     db_account.available = False
     db.commit()
     db.refresh(db_account)
     return db_account
+
+
