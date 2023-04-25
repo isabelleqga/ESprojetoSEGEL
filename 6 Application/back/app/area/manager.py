@@ -26,7 +26,11 @@ def create_area(db: Session, area: schemas.AreaCreation):
         id=uuid.uuid4().hex,
         name=area.name,
         description=area.description,
-        available=True,
+        available=area.available,
+        lighting = area.lighting,
+        floor_type = area.floor_type,
+        covered = area.covered,
+        photo_url = area.photo_url,
         account_id=area.account_id
     )
 
@@ -54,6 +58,14 @@ def update_area(db: Session, area: schemas.AreaUpdate, db_area: model.Area):
         db_area.name = area.name
     if area.description:
         db_area.description = area.description
+    if area.lighting:
+        db_area.lighting = area.lighting
+    if area.floor_type:
+        db_area.floor_type = area.floor_type
+    if area.covered:
+        db_area.covered = area.covered
+    if area.photo_url:
+        db_area.photo_url = area.photo_url
 
     db_area.available = area.available
     
