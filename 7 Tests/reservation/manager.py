@@ -20,7 +20,7 @@ def create_reservation(db: Session, reservation: schemas.ReservationCreate):
     if user and area:
 
         db_order = model.Reservation(
-            id=uuid.uuid4().hex,
+            id=uuid.uuid4(),
             value=reservation.value,
             reservation_date=reservation.reservation_date,
             time_start=reservation.time_start,

@@ -23,7 +23,7 @@ def create_area(db: Session, area: schemas.AreaCreation):
         area.account_id = user.id
 
     db_area = model.Area(
-        id=uuid.uuid4().hex,
+        id=uuid.uuid4(),
         name=area.name,
         description=area.description,
         available=True,

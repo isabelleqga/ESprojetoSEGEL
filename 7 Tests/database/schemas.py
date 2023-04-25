@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from uuid import UUID
 import datetime
 
 class ReservationBase(BaseModel):
@@ -17,15 +18,15 @@ class ReservationCreate(BaseModel):
     time_end: str
     justification: str
     reservation_type: str
-    area_id: str
-    account_id: str    
+    area_id: UUID
+    account_id: UUID    
 
     class Config:
         orm_mode = True
 
 class Reservation(ReservationBase):
-    area_id: str
-    account_id: str
+    area_id: UUID
+    account_id: UUID
 
     class Config:
         orm_mode = True
@@ -39,8 +40,8 @@ class ReservationUpdate(BaseModel):
     justification: str
     reservation_type: str
     status: str
-    area_id: str
-    account_id: str
+    area_id: UUID
+    account_id: UUID
 
 class AreaBase(BaseModel):
     name: str
@@ -48,7 +49,7 @@ class AreaBase(BaseModel):
 class Area(AreaBase):
     description: str
     available: bool
-    account_id: str | None = None
+    account_id: UUID | None = None
 
     reservations = list[Reservation]
 
@@ -57,7 +58,7 @@ class Area(AreaBase):
 
 class AreaCreation(AreaBase):
     description: str
-    account_id: str | None = None
+    account_id: UUID | None = None
 
     class Config:
         orm_mode = True
@@ -66,13 +67,13 @@ class AreaUpdate(BaseModel):
     name: str 
     description: str 
     available: bool 
-    account_id: str
+    account_id: UUID
 
     class Config:
         orm_mode = True
 
 class AreaDelete(BaseModel):
-    account_id: str
+    account_id: UUID
 
     class Config:
         orm_mode = True

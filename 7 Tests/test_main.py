@@ -2,6 +2,7 @@ import database.model as model
 from fastapi.testclient import TestClient
 from database.database import SessionLocal
 from auth import manager as auth_manager
+import uuid
 
 import database.model as model
 
@@ -17,13 +18,11 @@ def test_create_account():
     print("***  TESTE DO ENDPOINT DE CRIAÇÃO DE CONTAS  ***")
     # dados de exemplo para criar uma nova conta
     new_account = {
-        "id": "string",
-        "email": "test@example.com",
         "cpf": "12345678900",
         "name": "Test User",
+        "email": "test@example.com",
         "hashed_password": "password",
         "user_type": "0",
-        "available": True,
         "phone_number": "1234567890"
     }
 
@@ -55,13 +54,11 @@ def test_create_account():
     # tentar criar uma conta com o mesmo email
     print("**Tentando criar uma conta com o mesmo email**")
     new_account2 = {
-        "id": "string",
-        "email": "test@example.com",
         "cpf": "12345678900",
-        "name": "outra conta com mesmo email",
+        "name": "Outra conta mesmo email e cpf",
+        "email": "test@example.com",
         "hashed_password": "password",
         "user_type": "0",
-        "available": True,
         "phone_number": "1234567890"
     }
 
@@ -100,7 +97,6 @@ def test_create_area():
     new_area = {
         "name": "Test Area",
         "description": "Test Area Description",
-        "available": True,
         "account_id": account_id
     }
 
@@ -131,9 +127,8 @@ def test_create_area():
     print("**Tentando criar uma área com o mesmo nome**")
     new_area2 = {
         "name": "Test Area",
-        "description": "Teste de área com mesmo nome",
-        "available": True,
-        "account_id": "string"
+        "description": "Test Area mesmo nome",
+        "account_id": account_id
     }
 
     # faz uma solicitação POST para o endpoint de criação de área
@@ -178,9 +173,8 @@ def test_create_reservation():
         "time_end": "13:00",
         "justification": "Pq sim",
         "reservation_type": "Reserva",
-        "status": "Arquivado",
-        "area_id": account_id,
-        "account_id": area_id
+        "area_id": area_id,
+        "account_id": account_id
     }
 
     # faz uma solicitação POST para o endpoint de criação de reserva
@@ -198,7 +192,6 @@ def test_create_reservation():
     assert response.json()["time_end"] == new_reservation["time_end"]
     assert response.json()["justification"] == new_reservation["justification"]
     assert response.json()["reservation_type"] == new_reservation["reservation_type"]
-    assert response.json()["status"] == new_reservation["status"]
     assert response.json()["area_id"] == new_reservation["area_id"]
     assert response.json()["account_id"] == new_reservation["account_id"]
     print("Os dados da nova reserva estão corretos na resposta da API")
@@ -217,9 +210,8 @@ def test_create_reservation():
     assert reservation.time_end == new_reservation["time_end"]
     assert reservation.justification == new_reservation["justification"]
     assert reservation.reservation_type == new_reservation["reservation_type"]
-    assert reservation.status == new_reservation["status"]
-    assert reservation.area_id == new_reservation["area_id"]
-    assert reservation.account_id == new_reservation["account_id"]
+    assert str(reservation.area_id) == new_reservation["area_id"]
+    assert str(reservation.account_id) == new_reservation["account_id"]
     print("A reserva foi criada com sucesso no banco de dados")
 
     print(" ")
@@ -235,7 +227,6 @@ def test_create_reservation():
         "time_end": "13:00",
         "justification": "Reserva conflito",
         "reservation_type": "Reserva",
-        "status": "Arquivado",
         "area_id": account_id,
         "account_id": area_id
     }
@@ -264,7 +255,6 @@ def test_create_reservation():
         "time_end": "12:00",
         "justification": "Reserva falha",
         "reservation_type": "Reserva",
-        "status": "Arquivado",
         "area_id": account_id,
         "account_id": area_id
     }
@@ -303,7 +293,7 @@ def test_update_account():
     # query para pegar o id da conta pelo cpf
     db = SessionLocal()
     account_id = db.query(model.Account.id).filter(model.Account.cpf == "12345678900").first()
-    account_id = account_id[0]
+    account_id = str(account_id[0])
 
     # faz uma solicitação PUT para o endpoint de atualização de conta
     response = client.put("/account/update/"+account_id, json=update_account)
@@ -332,8 +322,10 @@ def test_update_account():
     # tentar atualizar uma conta inexistente
     print("**Tentando atualizar uma conta inexistente**")
 
+    my_uuid = str(uuid.uuid4())
+
     # faz uma solicitação PUT para o endpoint de atualização de conta
-    response = client.put("/account/update/999", json=update_account)
+    response = client.put("/account/update/"+my_uuid, json=update_account)
 
     # verificar se a api não aceita a atualização (código 404)
     assert response.status_code == 404
@@ -350,6 +342,7 @@ def test_update_account():
     print(" ---------------------------------------------- ")
 
 
+
 def test_update_area():
 
     print(" ")
@@ -358,7 +351,7 @@ def test_update_area():
     # query para pegar o account_id da área criada no teste anterior
     db = SessionLocal()
     account_id = db.query(model.Area).filter(model.Area.name == "Test Area").first()
-    account_id = account_id.account_id
+    account_id = str(account_id.account_id)
 
     # dados de exemplo para atualizar uma área
     update_area = {
@@ -401,8 +394,10 @@ def test_update_area():
     # tentar atualizar uma área inexistente
     print("**Tentando atualizar uma área inexistente**")
 
+    my_uuid = str(uuid.uuid4())
+
     # faz uma solicitação PUT para o endpoint de atualização de área com id inexistente
-    response = client.put("/area/update/999", json=update_area)
+    response = client.put("/area/update/"+my_uuid, json=update_area)
 
     # verificar se a api não aceita a atualização (código 404)
     assert response.status_code == 404
@@ -419,13 +414,11 @@ def test_update_area():
 
     # criar um novo usuário com permissão de usuário comum
     new_account = {
-        "id": "string",
-        "email": "testupdatearea@example.com",
         "cpf": "41234123412",
         "name": "NEW Test User",
+        "email": "testupdatearea@example.com",
         "hashed_password": "password",
         "user_type": "regular",
-        "available": True,
         "phone_number": "1234567890"
     }
 
@@ -469,12 +462,14 @@ def test_update_area():
    # tebtar atualizar uma área com um usuário que não existe
     print("**Tentando atualizar uma área com um usuário que não existe**")
 
+    my_uuid = str(uuid.uuid4())
+
     # tentar atualizar novamente a área com um usuário que não existe
     update_area3 = {
         "name": "Test Area Updated NEW AGAIN",
         "description": "Test Area Description Updated AGAIN",
         "available": True,
-        "account_id": "999"
+        "account_id": my_uuid
     }
 
     # query para pegar o id da área pelo nome
@@ -560,8 +555,8 @@ def test_update_reservation():
     assert reservation.justification == update_reservation["justification"]
     assert reservation.reservation_type == update_reservation["reservation_type"]
     assert reservation.status == update_reservation["status"]
-    assert reservation.area_id == update_reservation["area_id"]
-    assert reservation.account_id == update_reservation["account_id"]
+    assert str(reservation.area_id) == update_reservation["area_id"]
+    assert str(reservation.account_id) == update_reservation["account_id"]
     print("A reserva foi realmente atualizada no banco de dados")
 
     print(" ")
@@ -569,8 +564,10 @@ def test_update_reservation():
     # tentar atualizar uma reserva inexistente
     print("**Tentando atualizar uma reserva inexistente**")
 
+    my_uuid = str(uuid.uuid4())
+
     # faz uma solicitação PUT para o endpoint de atualização de reserva
-    response = client.put("/reservation/update/999", json=update_reservation)
+    response = client.put("/reservation/update/"+my_uuid, json=update_reservation)
     
     # verificar se a api não aceita a atualização (código 404)
     assert response.status_code == 404
@@ -673,8 +670,10 @@ def test_delete_reservation():
     # tentar excluir uma reserva inexistente
     print("**Tentando excluir uma reserva inexistente**")
 
+    my_uuid = str(uuid.uuid4())
+
     # faz uma solicitação DELETE para o endpoint de exclusão de reserva
-    response = client.delete("/reservation/delete/999")
+    response = client.delete("/reservation/delete/"+my_uuid)
 
     # verificar se a api não aceita a exclusão (código 404)
     assert response.status_code == 404
@@ -688,106 +687,6 @@ def test_delete_reservation():
     print("TESTE DE EXCLUSÃO DE RESERVA FINALIZADO COM SUCESSO!!")
 
     print(" ---------------------------------------------- ")
-
-
-"""def test_delete_area():
-    print(" ")
-    print("***TESTE DO ENDPOINT DE EXCLUSÃO DE ÁREA***")
-    # query para pegar o id da area pelo nome
-    db = SessionLocal()
-    area_id = db.query(model.Area.id).filter(model.Area.name == "Test Area Updated").first()
-    area_id = str(area_id[0])
-
-
-    # query para pegar o account_id da área criada no teste anterior
-    db = SessionLocal()
-    account_id = db.query(model.Area).filter(model.Area.name == "Test Area Updated").first()
-    account_id = account_id.account_id
-
-    # dados de exemplo para EXCLUIR uma área
-    delete_area = {
-        "account_id": account_id
-    }
-
-    # faz uma solicitação DELETE para o endpoint de exclusão de área
-    response = client.delete("/area/delete/{area_id}")
-
-    # verifique se a resposta da API é bem sucedida (código 200)
-    assert response.status_code == 200
-    print("A API retornou os dados da área excluída")
-
-    # verifique se a área foi realmente excluída do banco de dados
-    db = SessionLocal()
-    area = db.query(model.Area).filter(model.Area.id == area_id).first()
-    assert area is None
-    print("A área foi realmente excluída do banco de dados")
-    
-    # imprimir detalhes da exclusão
-    print("response = "+ response.json()["message"])
-
-    print(" ")
-
-    # tentar excluir uma área inexistente
-    print("**Tentando excluir uma área inexistente**")
-
-    # faz uma solicitação DELETE para o endpoint de exclusão de área
-    response = client.delete("/area/delete/999")
-
-    # verificar se a api não aceita a exclusão (código 404)
-    assert response.status_code == 404
-    print("A API retornou um erro, pois a área não existe")
-
-    # imprimir detalhes do erro
-    print("response = "+ response.json()["detail"])
-
-    print(" ")
-
-    print("TESTE DE EXCLUSÃO DE ÁREA FINALIZADO COM SUCESSO!!")
-
-    print(" ---------------------------------------------- ")"""
-
-
-
-
-"""def test_delete_area():
-    # dados para deletar uma area
-    delete_area = {
-        "name": "Test Area Updated",
-        "description": "Test Area Description Updated",
-        "available": True,
-        "account_id": "1"
-    }
-
-    # faz uma solicitação DELETE para o endpoint de exclusão de área
-    response = client.delete("/area/delete/1")
-
-    # verifique se a resposta da API é bem sucedida (código 200)
-    assert response.status_code == 200
-
-    # verifique se a área foi realmente excluída do banco de dados
-    db = SessionLocal()
-    area = db.query(model.Area).filter(model.Area.id == "1").first()
-    assert area is None"""
-
-
-"""def test_delete_account():
-    # dados para deletar uma conta
-    delete_account = {
-        "available": True
-    }
-    
-
-    # faz uma solicitação DELETE para o endpoint de exclusão de conta
-    response = client.delete("/account/delete/1")
-
-    # verifique se a resposta da API é bem sucedida (código 200)
-    assert response.status_code == 200
-
-    # verifique se a conta foi realmente excluída do banco de dados
-    db = SessionLocal()
-    account = db.query(model.Account).filter(model.Account.id == "1").first()
-    assert account is None"""
-
 
 
 

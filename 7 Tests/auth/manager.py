@@ -85,7 +85,7 @@ def get_account_by_email(db: Session, email: str):
 def create_account(db: Session, account: schemas.AccountCreation):
 
     db_account = model.Account(
-        id=uuid.uuid4().hex,
+        id=uuid.uuid4(),
         email=account.email,
         hashed_password=get_password_hash(account.hashed_password),
         cpf=account.cpf,
