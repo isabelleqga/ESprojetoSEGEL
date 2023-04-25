@@ -6,6 +6,8 @@ from database import schemas
 from reservation import manager
 from database.database import get_db
 from auth.manager import get_current_user
+from datetime import datetime
+
 
 router = APIRouter(
     prefix="/reservation",
@@ -18,6 +20,21 @@ router = APIRouter(
 def create_reservation(reservation: schemas.ReservationCreate, db: Session = Depends(get_db)):
     
     reserva_solicitada = manager.convert_datetime(reservation)
+
+    bottom_limit = datetime.strptime('06:00', '%H:%M').time() 
+    upper_limit = datetime.strptime('23:00', '%H:%M').time()
+
+    var_inic = str(reserva_solicitada[0]).split(' ')
+    horaCompleta_inic = var_inic[1]
+    hour_inic = datetime.strptime(horaCompleta_inic, '%H:%M:%S').time()
+
+    var_fim = str(reserva_solicitada[1]).split(' ')
+    horaCompleta_fim = var_fim[1]
+    hour_fim = datetime.strptime(horaCompleta_fim, '%H:%M:%S').time()
+
+    if (hour_inic < bottom_limit or hour_inic >= upper_limit) or (hour_fim <= bottom_limit or hour_fim > upper_limit):
+        raise HTTPException(
+            status_code=400, detail="Can't reservate at this hour")
 
     if reserva_solicitada[0] >= reserva_solicitada[1]:
         raise HTTPException(
@@ -55,6 +72,21 @@ def update_reservation(reservation_id: str, reservation: schemas.ReservationUpda
             status_code=404, detail="Reservation not found")
 
     reserva_solicitada = manager.convert_datetime(reservation)
+
+    bottom_limit = datetime.strptime('06:00', '%H:%M').time() 
+    upper_limit = datetime.strptime('23:00', '%H:%M').time()
+
+    var_inic = str(reserva_solicitada[0]).split(' ')
+    horaCompleta_inic = var_inic[1]
+    hour_inic = datetime.strptime(horaCompleta_inic, '%H:%M:%S').time()
+
+    var_fim = str(reserva_solicitada[1]).split(' ')
+    horaCompleta_fim = var_fim[1]
+    hour_fim = datetime.strptime(horaCompleta_fim, '%H:%M:%S').time()
+
+    if (hour_inic < bottom_limit or hour_inic >= upper_limit) or (hour_fim <= bottom_limit or hour_fim > upper_limit):
+        raise HTTPException(
+            status_code=400, detail="Can't reservate at this hour")
 
     if reserva_solicitada[0] >= reserva_solicitada[1]:
         raise HTTPException(

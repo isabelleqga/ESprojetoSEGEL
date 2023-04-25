@@ -21,7 +21,7 @@ def create_reservation(db: Session, reservation: schemas.ReservationCreate):
 
         db_order = model.Reservation(
             id=uuid.uuid4().hex,
-            value=reservation.value,
+            value=get_price(reservation),
             reservation_date=reservation.reservation_date,
             time_start=reservation.time_start,
             time_end=reservation.time_end,
@@ -46,8 +46,9 @@ def get_reservation_by_id(db: Session, reservation_id: str):
     return db.query(model.Reservation).filter(model.Reservation.id == reservation_id).first()
 
 def update_reservation(db: Session, reservation: schemas.ReservationUpdate, db_reservation = model.Reservation):
-    if reservation.value:
-        db_reservation.value = reservation.value
+ 
+    db_reservation.value = get_price(reservation)
+    
     if reservation.reservation_date:
         db_reservation.reservation_date = reservation.reservation_date
     if reservation.time_start:
@@ -90,3 +91,23 @@ def convert_datetime(reservation: schemas.Reservation):
 
 def get_reservations_by_area_id(db: Session, area_id: str):
     return db.query(model.Reservation).filter(model.Reservation.area_id == area_id).all()
+
+def get_price(reservation: schemas.Reservation):
+    reservation_start = reservation.time_start
+
+    reservation_end = reservation.time_end
+
+    time_start = reservation_start.split(':')
+    time_end = reservation_end.split(':')
+
+    hour_start = int(time_start[0])
+    hour_end = int(time_end[0])
+    
+    num_hour = hour_end - hour_start
+
+    if num_hour <= 0:
+        price = 10
+    else:
+        price = num_hour * 10
+
+    return price

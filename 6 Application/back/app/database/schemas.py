@@ -11,7 +11,6 @@ class ReservationBase(BaseModel):
     status: str   
 
 class ReservationCreate(BaseModel):
-    value: int | None = None
     reservation_date: str
     time_start: str
     time_end: str
@@ -32,7 +31,6 @@ class Reservation(ReservationBase):
 
 
 class ReservationUpdate(BaseModel):
-    value: int | None = None
     reservation_date: str
     time_start: str
     time_end: str
