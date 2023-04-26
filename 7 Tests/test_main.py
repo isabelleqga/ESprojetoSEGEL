@@ -97,6 +97,11 @@ def test_create_area():
     new_area = {
         "name": "Test Area",
         "description": "Test Area Description",
+        "available": True,
+        "lighting": "Refletores de LED",
+        "floor_type": "Piso de madeira",
+        "covered": "Quadra coberta",
+        "photo_url": "https://www.google.com",
         "account_id": account_id
     }
 
@@ -111,6 +116,10 @@ def test_create_area():
     # verifique se a resposta contém os dados da nova área criada
     assert response.json()["name"] == new_area["name"]
     assert response.json()["description"] == new_area["description"]
+    assert response.json()["lighting"] == new_area["lighting"]
+    assert response.json()["floor_type"] == new_area["floor_type"]
+    assert response.json()["covered"] == new_area["covered"]
+    assert response.json()["photo_url"] == new_area["photo_url"]
     print("Os dados da nova área estão corretos na resposta da API")
 
     # verifique se a área foi realmente criada no banco de dados
@@ -119,6 +128,10 @@ def test_create_area():
     assert area is not None
     assert area.name == new_area["name"]
     assert area.description == new_area["description"]
+    assert area.lighting == new_area["lighting"]
+    assert area.floor_type == new_area["floor_type"]
+    assert area.covered == new_area["covered"]
+    assert area.photo_url == new_area["photo_url"]
     print("A área foi criada com sucesso no banco de dados")
 
     print(" ")
@@ -127,7 +140,12 @@ def test_create_area():
     print("**Tentando criar uma área com o mesmo nome**")
     new_area2 = {
         "name": "Test Area",
-        "description": "Test Area mesmo nome",
+        "description": "Test Area com Mesmo Nome",
+        "available": True,
+        "lighting": "Refletores de LED",
+        "floor_type": "Piso de madeira",
+        "covered": "Quadra coberta",
+        "photo_url": "https://www.google.com",
         "account_id": account_id
     }
 
@@ -167,7 +185,6 @@ def test_create_reservation():
     # dados de exemplo para criar uma nova reserva
     
     new_reservation = {
-        "value": 0,
         "reservation_date": "04-08-2023",
         "time_start": "12:00",
         "time_end": "13:00",
@@ -221,7 +238,6 @@ def test_create_reservation():
     print("**Tentando criar uma reserva com a mesma data e o mesmo horário**")
 
     another_reservation = {
-        "value": 0,
         "reservation_date": "04-08-2023",
         "time_start": "12:00",
         "time_end": "13:00",
@@ -249,7 +265,6 @@ def test_create_reservation():
     print("**Tentando criar uma reserva com horário de início maior que o horário de término**")
 
     another_reservation2 = {
-        "value": 0,
         "reservation_date": "04-08-2023",
         "time_start": "13:00",
         "time_end": "12:00",
@@ -271,6 +286,59 @@ def test_create_reservation():
     print("response = "+ response.json()["detail"])
 
     print(" ")
+
+    # tentar criar uma reserva com horário de início menor que o horário de abertura da área
+    print("**Tentando criar uma reserva com horário de início menor que o horário de abertura da área**")
+
+    another_reservation3 = {
+        "reservation_date": "04-08-2023",
+        "time_start": "05:00",
+        "time_end": "08:00",
+        "justification": "Reserva falha",
+        "reservation_type": "Reserva",
+        "area_id": account_id,
+        "account_id": area_id
+    }
+
+    # faz uma solicitação POST para o endpoint de criação da nova reserva
+    response = client.post("/reservation/create", json=another_reservation3)
+
+    # verificar se a api não aceita a reserva (código 400)
+    assert response.status_code == 400
+    print("A API retornou um erro, pois o horário de início é menor que o horário de abertura da área")
+    print("status code = "+str(response.status_code))
+
+    # imprimir detalhes do erro
+    print("response = "+ response.json()["detail"])
+
+    print(" ")
+
+    # tentar criar uma reserva com horário de término maior que o horário de fechamento da área
+    print("**Tentando criar uma reserva com horário de término maior que o horário de fechamento da área**")
+
+    another_reservation4 = {
+        "reservation_date": "04-08-2023",
+        "time_start": "20:00",
+        "time_end": "23:50",
+        "justification": "Reserva falha",
+        "reservation_type": "Reserva",
+        "area_id": account_id,
+        "account_id": area_id
+    }
+
+    # faz uma solicitação POST para o endpoint de criação da nova reserva
+    response = client.post("/reservation/create", json=another_reservation4)
+
+    # verificar se a api não aceita a reserva (código 400)
+    assert response.status_code == 400
+    print("A API retornou um erro, pois o horário de término é maior que o horário de fechamento da área")
+    print("status code = "+str(response.status_code))
+
+    # imprimir detalhes do erro
+    print("response = "+ response.json()["detail"])
+
+    print(" ")
+
 
     print ("TESTE DE CRIAÇÃO DE RESERVA CONCLUÍDO COM SUCESSO!!")
 
@@ -358,10 +426,14 @@ def test_update_area():
         "name": "Test Area Updated",
         "description": "Test Area Description Updated",
         "available": True,
+        "lighting": "Refletores de LED",
+        "floor_type": "Piso de madeira",
+        "covered": "Quadra coberta",
+        "photo_url": "https://www.google.com",
         "account_id": account_id
     }
 
-    # query para pegar o id da área pelo nome
+    # query para pegar o id da área pelo nome antigo
     db = SessionLocal()
     area_id = db.query(model.Area.id).filter(model.Area.name == "Test Area").first()
     area_id = str(area_id[0])
@@ -378,6 +450,11 @@ def test_update_area():
     assert response.json()["name"] == update_area["name"]
     assert response.json()["description"] == update_area["description"]
     assert response.json()["available"] == update_area["available"]
+    assert response.json()["lighting"] == update_area["lighting"]
+    assert response.json()["floor_type"] == update_area["floor_type"]
+    assert response.json()["covered"] == update_area["covered"]
+    assert response.json()["photo_url"] == update_area["photo_url"]
+    assert response.json()["account_id"] == update_area["account_id"]
     print("Os dados da área atualizados estão corretos na resposta da API")
 
     # verifique se a área foi realmente atualizada no banco de dados
@@ -387,6 +464,11 @@ def test_update_area():
     assert area.name == update_area["name"]
     assert area.description == update_area["description"]
     assert area.available == update_area["available"]
+    assert area.lighting == update_area["lighting"]
+    assert area.floor_type == update_area["floor_type"]
+    assert area.covered == update_area["covered"]
+    assert area.photo_url == update_area["photo_url"]
+    assert str(area.account_id) == update_area["account_id"]
     print("A área foi atualizada com sucesso no banco de dados")
 
     print(" ")
@@ -436,6 +518,10 @@ def test_update_area():
         "name": "Test Area Updated NEW",
         "description": "Test Area Description Updated",
         "available": True,
+        "lighting": "Refletores de LED",
+        "floor_type": "Piso de madeira",
+        "covered": "Quadra coberta",
+        "photo_url": "https://www.google.com",
         "account_id": account_id
     }
 
@@ -469,6 +555,10 @@ def test_update_area():
         "name": "Test Area Updated NEW AGAIN",
         "description": "Test Area Description Updated AGAIN",
         "available": True,
+        "lighting": "Refletores de LED",
+        "floor_type": "Piso de madeira",
+        "covered": "Quadra coberta",
+        "photo_url": "https://www.google.com",
         "account_id": my_uuid
     }
 
@@ -510,7 +600,6 @@ def test_update_reservation():
 
     # dados de exemplo para atualizar uma reserva
     update_reservation = {
-        "value": 0,
         "reservation_date": "10-10-2023",
         "time_start": "12:00",
         "time_end": "13:00",
@@ -583,7 +672,6 @@ def test_update_reservation():
 
     # dados de exemplo para atualizar uma reserva
     update_reservation2 = {
-        "value": 0,
         "reservation_date": "10-10-2023",
         "time_start": "13:00",
         "time_end": "12:00",
@@ -611,7 +699,6 @@ def test_update_reservation():
 
     # dados de exemplo para atualizar uma reserva
     update_reservation3 = {
-        "value": 0,
         "reservation_date": "10-10-2023",
         "time_start": "12:00",
         "time_end": "13:00",
@@ -633,6 +720,61 @@ def test_update_reservation():
     print("response = "+ response.json()["detail"])
 
     print(" ")
+
+    # tentar atualizar uma reserva para um horário que a hora de início é menor que a hora de abertura da área
+    print("**Tentando atualizar uma reserva para um horário que a hora de início é menor que a hora de abertura da área**")
+
+    # dados de exemplo para atualizar uma reserva
+    update_reservation4 = {
+        "reservation_date": "10-10-2023",
+        "time_start": "05:00",
+        "time_end": "13:00",
+        "justification": "ATUALIZADO",
+        "reservation_type": "Reserva",
+        "status": "Arquivado",
+        "area_id": area_id,
+        "account_id": account_id
+    }
+
+    # faz uma solicitação PUT para o endpoint de atualização de reserva
+    response = client.put("/reservation/update/"+reservation_id, json=update_reservation4)
+
+    # verificar se a api não aceita a atualização (código 400)
+    assert response.status_code == 400
+    print("A API retornou um erro, pois a hora de início é menor que a hora de abertura da área")
+
+    # imprimir detalhes do erro
+    print("response = "+ response.json()["detail"])
+
+    print(" ")
+
+    # tentar atualizar uma reserva para um horário que a hora de fim é maior que a hora de fechamento da área
+    print("**Tentando atualizar uma reserva para um horário que a hora de fim é maior que a hora de fechamento da área**")
+
+    # dados de exemplo para atualizar uma reserva
+    update_reservation5 = {
+        "reservation_date": "10-10-2023",
+        "time_start": "12:00",
+        "time_end": "23:50",
+        "justification": "ATUALIZADO",
+        "reservation_type": "Reserva",
+        "status": "Arquivado",
+        "area_id": area_id,
+        "account_id": account_id
+    }
+
+    # faz uma solicitação PUT para o endpoint de atualização de reserva
+    response = client.put("/reservation/update/"+reservation_id, json=update_reservation5)
+    
+    # verificar se a api não aceita a atualização (código 400)
+    assert response.status_code == 400
+    print("A API retornou um erro, pois a hora de fim é maior que a hora de fechamento da área")
+
+    # imprimir detalhes do erro
+    print("response = "+ response.json()["detail"])
+
+    print(" ")
+
 
     print("TESTE DE ATUALIZAÇÃO DE RESERVA FINALIZADO COM SUCESSO!!")
 

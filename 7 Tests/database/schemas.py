@@ -12,7 +12,6 @@ class ReservationBase(BaseModel):
     status: str   
 
 class ReservationCreate(BaseModel):
-    value: int | None = None
     reservation_date: str
     time_start: str
     time_end: str
@@ -33,7 +32,6 @@ class Reservation(ReservationBase):
 
 
 class ReservationUpdate(BaseModel):
-    value: int | None = None
     reservation_date: str
     time_start: str
     time_end: str
@@ -49,6 +47,10 @@ class AreaBase(BaseModel):
 class Area(AreaBase):
     description: str
     available: bool
+    lighting: str
+    floor_type: str
+    covered: str
+    photo_url: str
     account_id: UUID | None = None
 
     reservations = list[Reservation]
@@ -58,6 +60,11 @@ class Area(AreaBase):
 
 class AreaCreation(AreaBase):
     description: str
+    available: bool
+    lighting: str
+    floor_type: str
+    covered: str
+    photo_url: str
     account_id: UUID | None = None
 
     class Config:
@@ -67,6 +74,10 @@ class AreaUpdate(BaseModel):
     name: str 
     description: str 
     available: bool 
+    lighting: str
+    floor_type: str
+    covered: str
+    photo_url: str
     account_id: UUID
 
     class Config:

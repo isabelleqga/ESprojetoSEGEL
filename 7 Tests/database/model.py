@@ -28,6 +28,10 @@ class Area(Base):
     name = Column(String, unique=True, index=False)
     available = Column(Boolean)
     description = Column(String)
+    lighting = Column(String)
+    floor_type = Column(String)
+    covered = Column(String)
+    photo_url = Column(String)
     account_id = Column(UUID, ForeignKey("accounts.id"), nullable=True)
 
     account = relationship("Account", back_populates="areas")
