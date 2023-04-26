@@ -31,9 +31,9 @@
     <a href="https://github.com/isabelleqga/ESprojetoSEGEL/wiki"><strong>Visite nossa Wiki &raquo;</strong></a>
     <br>
     <br>
-    <a href="http://falko.solutions">Acesse o SACCE (botar link aqui dps do deploy)</a>
+    <a href="">Acesse o SACCE</a>
     &middot;
-    <a href="https://github.com/isabelleqga/ESprojetoSEGEL/tree/main/Application">Repositório do Back-End e Front-End</a>
+    <a href="https://github.com/projetaogrupoa/segel-app">Repositório do Back-End e Front-End</a>
   </p>
 </p>
 
